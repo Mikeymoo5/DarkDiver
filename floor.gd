@@ -2,8 +2,9 @@ extends Resource
 
 ## A floor of a dungeon.
 class_name Floor
-
 #@export var tiles: Array[Array[int]]
+#var tiles: Array[Array[]]
+
 @export var dungeon_seed: int
 ## The seed of the individual floor
 @export var floor_seed: int
@@ -12,6 +13,13 @@ class_name Floor
 @export var dungeon_size: int
 ## Width and height of the gridcells used to generate a dungeon floor
 @export var room_grid_size: int
+
+enum Tiles {
+	FLOOR,
+	WALL,
+	DOWN_PORTAL,
+	UP_PORTAL
+}
 
 func _init(dungeon_paramaters: Dictionary, floor_number) -> void:
 	self.dungeon_seed = dungeon_paramaters.seed
@@ -24,6 +32,10 @@ func _init(dungeon_paramaters: Dictionary, floor_number) -> void:
 func _generate_floor():
 	var floor_rng = RandomNumberGenerator.new()
 	floor_rng.seed = floor_seed
+	
+	var rooms
+	#for x in range(
+	#for r in 
 	
 
 func _generate_floor_seed() -> int:
