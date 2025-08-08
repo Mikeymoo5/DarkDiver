@@ -1,0 +1,63 @@
+[gd_scene load_steps=5 format=3 uid="uid://ct7jkw5on5oa1"]
+
+[ext_resource type="Script" uid="uid://cbvwkarquld0g" path="res://src/MainScene.gd" id="1_rpqi1"]
+[ext_resource type="PackedScene" uid="uid://d216mdhtk6xfk" path="res://src/Player/player.tscn" id="2_uxrcv"]
+[ext_resource type="PackedScene" uid="uid://ga85g5tvwj82" path="res://src/Utilities/save_handler.tscn" id="3_rf2cd"]
+[ext_resource type="Script" uid="uid://bf7s65wvnswgl" path="res://src/GUI/Main Menu/MainMenu.gd" id="3_uxrcv"]
+
+[node name="MainScene" type="Node2D"]
+script = ExtResource("1_rpqi1")
+
+[node name="Main2D" type="Node2D" parent="."]
+
+[node name="Player" parent="Main2D" instance=ExtResource("2_uxrcv")]
+visible = false
+z_index = 1
+scale = Vector2(1, 1)
+
+[node name="Camera2D" type="Camera2D" parent="Main2D/Player"]
+
+[node name="Hud" type="CanvasLayer" parent="."]
+
+[node name="Main Menu" type="Control" parent="Hud"]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+grow_horizontal = 2
+size_flags_horizontal = 4
+script = ExtResource("3_uxrcv")
+
+[node name="MarginContainer" type="MarginContainer" parent="Hud/Main Menu"]
+layout_mode = 1
+offset_right = 96.0
+offset_bottom = 101.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Hud/Main Menu/MarginContainer"]
+layout_mode = 2
+
+[node name="Load_Button" type="Button" parent="Hud/Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Load Game"
+
+[node name="New_Game" type="Button" parent="Hud/Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "New Game"
+
+[node name="Exit_Button" type="Button" parent="Hud/Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="Label" type="Label" parent="Hud/Main Menu"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Utilities" type="Node" parent="."]
+
+[node name="SaveHandler" parent="Utilities" instance=ExtResource("3_rf2cd")]
+save_path = "user://savegame.tres"
+
+[connection signal="pressed" from="Hud/Main Menu/MarginContainer/VBoxContainer/Load_Button" to="Hud/Main Menu" method="_on_load_button_pressed"]
+[connection signal="pressed" from="Hud/Main Menu/MarginContainer/VBoxContainer/New_Game" to="Hud/Main Menu" method="_on_new_game_pressed"]
+[connection signal="pressed" from="Hud/Main Menu/MarginContainer/VBoxContainer/Exit_Button" to="Hud/Main Menu" method="_on_exit_button_pressed"]

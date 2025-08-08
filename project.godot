@@ -11,14 +11,18 @@ config_version=5
 [application]
 
 config/name="DarkDivers"
-run/main_scene="uid://ctyb06n62w562"
+run/main_scene="uid://ct7jkw5on5oa1"
 config/features=PackedStringArray("4.4", "GL Compatibility")
-config/icon="res://icon.svg"
+
+[autoload]
+
+Global="*res://src/Global.gd"
 
 [display]
 
 window/size/viewport_width=640
 window/size/viewport_height=480
+window/main_scene="uid://ct7jkw5on5oa1"
 
 [editor_plugins]
 

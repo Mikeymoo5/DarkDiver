@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="consumable" load_steps=2 format=3 uid="uid://bqmkacqwoxp11"]
+
+[ext_resource type="Script" uid="uid://do5urti16k353" path="res://src/Entity/Inventory/consumable.gd" id="1_qtnx7"]
+
+[resource]
+script = ExtResource("1_qtnx7")
+health_gain = 5.0
+mana_gain = 0.0
+name = "Basic Health Potion"
+metadata/_custom_type_script = "uid://do5urti16k353"
