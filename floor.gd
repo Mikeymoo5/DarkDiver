@@ -4,7 +4,7 @@ extends Resource
 class_name Floor
 #@export var tiles: Array[Array[int]]
 #var tiles: Array[Array[]]
-var tileset: TileSet = load("res://assets/tilesets/dungeon_tileset.tres")
+var tileset: TileSet = load("res://assets/tilesets/custom_tileset.tres")
 @export var dungeon_seed: int
 ## The seed of the individual floor
 @export var floor_seed: int
@@ -63,6 +63,7 @@ func _generate_floor():
 	var rng = RandomNumberGenerator.new()
 	var sq_rooms_per_floor = sqrt(self.rooms_per_floor)
 	var rooms = []
+	
 	for x in range(floor_size):
 		tiles.append([])
 		for y in range(floor_size):
@@ -77,8 +78,8 @@ func _generate_floor():
 			var x_offset = _irng(rng).randi_range(roundi(0-((room_cell_size-1)/4)), roundi((room_cell_size-1)/4))
 			var y_offset = _irng(rng).randi_range(roundi(0-((room_cell_size-1)/4)), roundi((room_cell_size-1)/4))
 			#TODO: Ensure that the room has a minimum required size, but that this size is always possible, regardless of offsets
-			var width = _irng(rng).randi_range(2, abs(((room_cell_size-1)/2) - x_offset)) * 2
-			var height = _irng(rng).randi_range(2, abs(((room_cell_size-1)/2) - y_offset)) * 2
+			var width = _irng(rng).randi_range(5, abs(((room_cell_size-1)/2) - x_offset)) * 2
+			var height = _irng(rng).randi_range(5, abs(((room_cell_size-1)/2) - y_offset)) * 2
 			
 			#TODO: Implement room types
 			rooms[x].append({
@@ -87,7 +88,7 @@ func _generate_floor():
 				"width": width,
 				"height": height
 			})
-
+			
 	for i in range(rooms.size()):
 		for j in range(rooms[i].size()):
 			var center_tile = Vector2((i*room_cell_size) + i, (j*room_cell_size) + j)
@@ -121,10 +122,15 @@ func get_tilemaplayer() -> TileMapLayer:
 	print("Getting tilemaplayer")
 	var layer = TileMapLayer.new()
 	layer.tile_set = tileset
+	#var walls = []
+	var floors = []
 	for x in range(tiles.size()):
 		for y in range(tiles[x].size()):
 			if tiles[x][y] == Tiles.WALL:
-				layer.set_cell(Vector2(x, y), 0, Vector2(2,1))
+				layer.set_cell(Vector2(x, y), 0, Vector2(0,5))
+				#layer.set_cells_terrain_connect()
 			else:
-				layer.set_cell(Vector2(x, y), 0, Vector2(0,0))
+				floors.append(Vector2(x,y))
+				#layer.set_cell(Vector2(x, y), 0, Vector2(0,0))
+	layer.set_cells_terrain_connect(floors, 0, 0)
 	return layer

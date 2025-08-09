@@ -8,7 +8,7 @@ func write_save():
 	
 	save_state.player_data = Global.player.player_data
 	save_state.dungeon = Global.dungeon
-	
+
 	ResourceSaver.save(save_state, save_path)
 	pass
 	

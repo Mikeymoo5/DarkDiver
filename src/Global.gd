@@ -7,3 +7,5 @@ var player: player_script
 var dungeon: Dungeon
 
 var level_tilemap: TileMapLayer
+
+#var world_gen_progress: int = 0

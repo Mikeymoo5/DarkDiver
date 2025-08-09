@@ -24,7 +24,6 @@ func new_game():
 	save_handler.new_save()
 	load_game()
 
-	
 func unload_level():
 	if(is_instance_valid(level_instance)):
 		level_instance.queue_free()

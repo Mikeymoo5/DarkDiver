@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
-var max_speed: float = 500
-var max_acceleration: float = 1000
+var max_speed: float = 5000
+var max_acceleration: float = 2000
 var move_direction: Vector2
 var acceleration: Vector2
 
