@@ -7,6 +7,6 @@ class_name Inventory_Item
 @export var name: String
 
 
-func _init(p_texture = null, p_name = "Empty Item") -> void:
-	texture = p_texture
-	name = p_name
+func _init(p_texture := PlaceholderTexture2D.new(), p_name := "Empty Item") -> void:
+	self.texture = p_texture
+	self.name = p_name

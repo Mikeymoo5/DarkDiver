@@ -5,9 +5,10 @@ class_name SavedGame
 @export var player_data: PlayerData
 @export var dungeon: Dungeon
 
+#TODO: Store only the data required to reconstruct a Dungeon in the save file. This avoids Dungeon double initializing
 func _init(
 			player_data := PlayerData.new(),
-			dungeon := Dungeon.new(0, 1001, 101, 100)
+			dungeon := Dungeon.new()
 		):
 	self.player_data = player_data
 	self.dungeon = dungeon

@@ -1,7 +1,6 @@
-[gd_scene load_steps=3 format=4 uid="uid://chnigbbuxiay8"]
+[gd_scene load_steps=2 format=4 uid="uid://chnigbbuxiay8"]
 
 [ext_resource type="TileSet" uid="uid://bllrh1thfgyw7" path="res://assets/tilesets/dungeon_tileset.tres" id="1_s5a2w"]
-[ext_resource type="PackedScene" uid="uid://cb8mx0sbmyafo" path="res://src/scenes/door.tscn" id="2_srduu"]
 
 [node name="Dungeon" type="Node2D"]
 
@@ -15,5 +14,3 @@ tile_set = ExtResource("1_s5a2w")
 position = Vector2(-1, 0)
 tile_map_data = PackedByteArray("AAD+//r/AAAEAAAAAAD///r/AAACAAIAAAAAAPr/AAACAAIAAAABAPr/AAAFAAAAAAD+//v/AAADAAEAAAD+//z/AAAEAAEAAAD+//3/AAAJAAQAAAD+//7/AAAJAAQAAAD///v/AAAAAAAAAAD///z/AAACAAAAAAD///3/AAAEAAMAAAD///7/AAAKAAAAAAAAAPv/AAAAAAAAAAAAAPz/AAACAAAAAAAAAP3/AAAEAAMAAAAAAP7/AAALAAAAAAABAPv/AAABAAEAAAABAPz/AAAFAAEAAAABAP3/AAALAAQAAAABAP7/AAALAAQAAAA=")
 tile_set = ExtResource("1_s5a2w")
-
-[node name="Door" parent="." instance=ExtResource("2_srduu")]

@@ -1,0 +1,102 @@
+[gd_scene load_steps=6 format=3 uid="uid://ct7jkw5on5oa1"]
+
+[ext_resource type="Script" uid="uid://cbvwkarquld0g" path="res://src/MainScene.gd" id="1_rpqi1"]
+[ext_resource type="PackedScene" uid="uid://d216mdhtk6xfk" path="res://src/Player/player.tscn" id="2_uxrcv"]
+[ext_resource type="PackedScene" uid="uid://ga85g5tvwj82" path="res://src/Utilities/save_handler.tscn" id="3_rf2cd"]
+[ext_resource type="Script" uid="uid://cuskynje58oua" path="res://src/Levels/Dungeon/main_menu.gd" id="4_40oso"]
+[ext_resource type="Texture2D" uid="uid://cr8wdhb5ypfn2" path="res://assets/player.png" id="4_h5dix"]
+
+[node name="MainScene" type="Node2D"]
+script = ExtResource("1_rpqi1")
+
+[node name="Main2D" type="Node2D" parent="."]
+
+[node name="Player" parent="Main2D" instance=ExtResource("2_uxrcv")]
+visible = false
+z_index = 1
+scale = Vector2(1, 1)
+
+[node name="Camera2D" type="Camera2D" parent="Main2D/Player"]
+
+[node name="Utilities" type="Node" parent="."]
+
+[node name="SaveHandler" parent="Utilities" instance=ExtResource("3_rf2cd")]
+save_path = "user://savegame.tres"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Main Menu" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_40oso")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Main Menu"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_h5dix")
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Main Menu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0421875
+anchor_top = 0.941667
+anchor_right = 0.0421875
+anchor_bottom = 0.941667
+offset_top = -101.0
+offset_right = 96.0
+grow_vertical = 0
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Main Menu/MarginContainer"]
+layout_mode = 2
+
+[node name="Load Game Button" type="Button" parent="CanvasLayer/Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Load Game"
+
+[node name="New Game Button" type="Button" parent="CanvasLayer/Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "New Game"
+
+[node name="Exit Button" type="Button" parent="CanvasLayer/Main Menu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Exit"
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.485938
+anchor_bottom = 0.0708333
+grow_horizontal = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CanvasLayer/HUD/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Health"
+
+[node name="RichTextLabel2" type="RichTextLabel" parent="CanvasLayer/HUD/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Mana"
+
+[connection signal="pressed" from="CanvasLayer/Main Menu/MarginContainer/VBoxContainer/Load Game Button" to="CanvasLayer/Main Menu" method="_on_load_game_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Main Menu/MarginContainer/VBoxContainer/New Game Button" to="CanvasLayer/Main Menu" method="_on_new_game_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Main Menu/MarginContainer/VBoxContainer/Exit Button" to="CanvasLayer/Main Menu" method="_on_exit_button_pressed"]

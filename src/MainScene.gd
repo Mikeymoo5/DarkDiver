@@ -15,7 +15,9 @@ func _ready():
 
 func load_game():
 	save_handler.read_save()
-	load_level("dungeon")
+	#load_level("dungeon")
+	Global.dungeon._load_floor(0)
+	$Main2D.add_child(Global.level_tilemap)
 	player.enable()
 	
 func new_game():

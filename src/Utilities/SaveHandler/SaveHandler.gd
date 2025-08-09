@@ -21,7 +21,6 @@ func read_save():
 		#TODO: make persistent_player_data and player_data
 		Global.player.player_data = save_state.player_data	
 		Global.dungeon = save_state.dungeon
-		print("max_health: %s" % save_state.player_data.max_health)
 		
 func new_save():
 	var save_state: SavedGame = SavedGame.new()

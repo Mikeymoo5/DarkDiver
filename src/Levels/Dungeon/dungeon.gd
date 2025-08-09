@@ -4,7 +4,7 @@ extends Resource
 class_name Dungeon
 
 ## The dungeon's seed. 
-@export var seed: int
+@export var dungeon_seed: int
 
 # Sizing variables
 @export var rooms_per_floor: int # How many rooms are on each floor
@@ -14,17 +14,17 @@ class_name Dungeon
 @export var total_floors: int # How many total floors the dungeon will have
 @export var dungeon_parameters: Dictionary # Dungeon parameters, passed into floors upon their creation
 
-@export var floors: Array[Floor] # Stores all of the floors
+@export var floors: Array[Floor] # Stores all of the pregen_floors
 
 var rng := RandomNumberGenerator.new()
-var room_grid_size
 
-const pregen_floors := 10
+const pregen_floors := 3
 
 # TODO: use some sort of hashing?
-func _init(seed := 0, max_floor_size := 1000, maximum_rooms := 100, total_floors := 100):
+func _init(dungeon_seed := 0, max_floor_size := 1000, maximum_rooms := 99, total_floors := 100):
+	print("DUNGEON INIT")
 	rng.seed = Time.get_unix_time_from_system()
-	self.seed = seed
+	self.dungeon_seed = dungeon_seed
 	
 	# Room sizing
 	self.rooms_per_floor = floori(sqrt(maximum_rooms)) ** 2 # Finds how many rooms can be on each floor
@@ -33,26 +33,31 @@ func _init(seed := 0, max_floor_size := 1000, maximum_rooms := 100, total_floors
 
 	self.total_floors = total_floors
 	self.dungeon_parameters = {
-		"seed": self.seed,
+		"dungeon_seed": self.dungeon_seed,
 		"floor_size" : self.floor_size,
 		"room_cell_size":  self.room_cell_size,
 		"rooms_per_floor": self.rooms_per_floor
 	}
 	
-	print("A new dungeon has been created.")
-	print("It is " + str(floor_size) + "x" + str(floor_size) + " tiles.")
-	print("Each floor contains " + str(rooms_per_floor) + " rooms.")
-	print("Each room cell is " + str(room_cell_size) + "x" + str(room_cell_size) + " tiles wide.")
-	if  (room_cell_size % 2) == 0:
+	#print("A new dungeon has been created.")
+	#print("It is " + str(floor_size) + "x" + str(floor_size) + " tiles.")
+	#print("Each floor contains " + str(rooms_per_floor) + " rooms.")
+	#print("Each room cell is " + str(room_cell_size) + "x" + str(room_cell_size) + " tiles wide.")
+	
+	if (room_cell_size % 2) == 0:
 		push_error("Room cell size is not odd!")
-	if(seed==0):
-		self.seed = rng.randi_range(1, 1000)
+		
+	# TODO: Better seed system
+	if(dungeon_seed==0):
+		self.dungeon_seed = rng.randi_range(1, 1000)
 	else:
-		self.seed = clampi(seed, 1, 1000)
+		self.dungeon_seed = clampi(dungeon_seed, 1, 1000)
 		
 	for f in pregen_floors:
-		var new_floor = Floor.new(dungeon_parameters, f)
+		var new_floor:Floor = Floor.new(self.dungeon_parameters, f)
 		self.floors.append(new_floor)
-		
+		#var fl:Floor = Floor.new(self.dungeon_parameters, f)
+			
 func _load_floor(floor_to_load):
-	pass
+	#TODO: Implement
+	Global.level_tilemap = self.floors[floor_to_load].get_tilemaplayer()
