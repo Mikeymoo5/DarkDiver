@@ -4,7 +4,7 @@ extends Resource
 class_name Floor
 #@export var tiles: Array[Array[int]]
 #var tiles: Array[Array[]]
-
+var tileset: TileSet = load("res://assets/tilesets/dungeon_tileset.tres")
 @export var dungeon_seed: int
 ## The seed of the individual floor
 @export var floor_seed: int
@@ -118,12 +118,13 @@ func _generate_floor_seed() -> int:
 	return new_seed
 
 func get_tilemaplayer() -> TileMapLayer:
-	var tileset: TileSet = preload("res://assets/tilesets/dungeon_tileset.tres")
+	print("Getting tilemaplayer")
 	var layer = TileMapLayer.new()
+	layer.tile_set = tileset
 	for x in range(tiles.size()):
 		for y in range(tiles[x].size()):
 			if tiles[x][y] == Tiles.WALL:
-				layer.set_cell(Vector2(x, y), 1, Vector2(2,1))
+				layer.set_cell(Vector2(x, y), 0, Vector2(2,1))
 			else:
-				layer.set_cell(Vector2(x, y), 1, Vector2(0,0))
+				layer.set_cell(Vector2(x, y), 0, Vector2(0,0))
 	return layer
