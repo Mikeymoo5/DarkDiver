@@ -10,10 +10,11 @@ class_name Floor
 @export var floor_seed: int
 ## Dungeon width and height, in tiles
 
-@export var dungeon_size: int
+@export var floor_size: int
 ## Width and height of the gridcells used to generate a dungeon floor
-@export var room_grid_size: int
+@export var room_cell_size: int
 
+@export var rooms_per_floor: int
 enum Tiles {
 	FLOOR,
 	WALL,
@@ -23,20 +24,42 @@ enum Tiles {
 
 func _init(dungeon_paramaters: Dictionary, floor_number) -> void:
 	self.dungeon_seed = dungeon_paramaters.seed
-	self.dungeon_size = dungeon_paramaters.dungeon_size
-	self.room_grid_size = dungeon_paramaters.room_grid_size
+	self.floor_size = dungeon_paramaters.floor_size
+	self.room_cell_size = dungeon_paramaters.room_cell_size
+	self.rooms_per_floor = dungeon_paramaters.rooms_per_floor
 	
 	self.floor_seed = _generate_floor_seed()
 	_generate_floor()
 	
+#TODO: Ensure all cells always have a true center
+
 func _generate_floor():
-	var floor_rng = RandomNumberGenerator.new()
-	floor_rng.seed = floor_seed
+	var rng = RandomNumberGenerator.new()
+	var sq_rooms_per_floor = sqrt(self.rooms_per_floor)
+	var rooms = []
+	for x in range(sq_rooms_per_floor):
+		rooms.append([])
+		for y in range(sq_rooms_per_floor):
+			#rng.seed = floor_seed * x * y	
+			#TODO: Go over this to make sure this is correct		
+			var x_offset = _irng(rng).randi_range(roundi(0-((room_cell_size-1)/4)), roundi((room_cell_size-1)/4))
+			var y_offset = _irng(rng).randi_range(roundi(0-((room_cell_size-1)/4)), roundi((room_cell_size-1)/4))
+			#TODO: Ensure that the room has a minimum required size, but that this size is always possible, regardless of offsets
+			
+			var width = _irng(rng).randi_range(2, abs(((room_cell_size-1)/2) - x_offset)) * 2
+			var height = _irng(rng).randi_range(2, abs(((room_cell_size-1)/2) - y_offset)) * 2
+			rooms[x].append({
+				"x_offset": x_offset,
+				"y_offset": y_offset,
+				"width": width,
+				"height": height
+			})
 	
-	var rooms
-	#for x in range(
-	#for r in 
-	
+
+# Increment RNG seed every use
+func _irng(rng) -> RandomNumberGenerator:
+	rng.seed += 1
+	return rng
 
 func _generate_floor_seed() -> int:
 	var dungeon_rng = RandomNumberGenerator.new()

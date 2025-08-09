@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cbvwkarquld0g" path="res://src/MainScene.gd" id="1_rpqi1"]
 [ext_resource type="PackedScene" uid="uid://d216mdhtk6xfk" path="res://src/Player/player.tscn" id="2_uxrcv"]
 [ext_resource type="PackedScene" uid="uid://ga85g5tvwj82" path="res://src/Utilities/save_handler.tscn" id="3_rf2cd"]
-[ext_resource type="Script" uid="uid://cuskynje58oua" path="res://src/main_menu.gd" id="4_40oso"]
+[ext_resource type="Script" uid="uid://cuskynje58oua" path="res://src/Levels/Dungeon/main_menu.gd" id="4_40oso"]
 [ext_resource type="Texture2D" uid="uid://cr8wdhb5ypfn2" path="res://assets/player.png" id="4_h5dix"]
 
 [node name="MainScene" type="Node2D"]
