@@ -58,6 +58,10 @@ func _init(dungeon_seed := 0, max_floor_size := 500, maximum_rooms := 75, total_
 		self.floors.append(new_floor)
 		#var fl:Floor = Floor.new(self.dungeon_parameters, f)
 			
+
+func get_floor_reference(floor_id):
+	return self.floors[floor_id]
+
 func _load_floor(floor_to_load):
 	#TODO: Implement
 	Global.level_tilemap = self.floors[floor_to_load].get_tilemaplayer()

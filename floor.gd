@@ -35,12 +35,15 @@ enum RoomTypes {
 	BOSS,
 }
 
+@export var spawn_room = {}
+@export var boss_room = {}
+
 # Measured in percentage. Set to -1 for custom logic
 const RoomTypeChances = {
-	RoomTypes.BLANK: 60,
-	RoomTypes.ENEMY: 35,
-	RoomTypes.TREASURE: 2.5,
-	RoomTypes.MINI_BOSS: 2.5,
+	RoomTypes.BLANK: 0.6,
+	RoomTypes.ENEMY: 0.35,
+	RoomTypes.TREASURE: 0.3,
+	RoomTypes.MINI_BOSS: 0.2,
 	RoomTypes.SPAWN: -1, # One per floor
 	RoomTypes.BOSS: -1, # One per floor
 }
@@ -83,12 +86,23 @@ func _generate_floor():
 			var width = _irng(rng).randi_range(5, abs(((room_cell_size-1)/2) - x_offset)) * 2
 			var height = _irng(rng).randi_range(5, abs(((room_cell_size-1)/2) - y_offset)) * 2
 			
+			#TODO: Find a better way to randomly select rooms, so that rooms can have the same 
+			var prob = _irng(rng).randf()
+			var room_type
+			for key in RoomTypeChances:
+				if not RoomTypeChances[key] == -1:
+					prob -= RoomTypeChances[key]
+					if prob <= 0:
+						room_type = key
+				
+			
 			#TODO: Implement room types
 			rooms[x].append({
 				"x_offset": x_offset,
 				"y_offset": y_offset,
 				"width": width,
-				"height": height
+				"height": height,
+				"type": room_type
 			})
 	
 	var flattened_rooms = []
@@ -134,6 +148,17 @@ func _generate_floor():
 			_create_v_tunnel(first_center.y, next_center.y, x_avg)
 			_create_h_tunnel(x_avg, next_center.x, next_center.y)
 			
+	#TODO: move this into a pre-existing loop, probably the one above
+	for i in flattened_rooms.size():
+		if i==0:
+			flattened_rooms[i].type = RoomTypes.SPAWN
+			self.spawn_room = flattened_rooms[i]
+			#flattened_rooms[i] Maybe pop this in the future?
+		elif i==1:
+			flattened_rooms[i].type = RoomTypes.BOSS
+			self.boss_room = flattened_rooms[i]
+				
+		
 func _create_h_tunnel(x1, x2, y):
 	for x in range(min(x1, x2), max(x1, x2) + 1):
 		tiles[x][y] = Tiles.FLOOR
@@ -149,6 +174,8 @@ func _irng(rng) -> RandomNumberGenerator:
 	rng.seed += 1
 	return rng
 
+func get_player_spawn(tilemaplayer: TileMapLayer) -> Vector2:
+	return 	tilemaplayer.map_to_local(self.spawn_room.offset_center)
 
 func _generate_floor_seed() -> int:
 	# TODO: Incorporate floor #. Currently, every floor uses the same seed

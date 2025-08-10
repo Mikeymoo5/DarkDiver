@@ -18,6 +18,8 @@ func load_game():
 	#load_level("dungeon")
 	Global.dungeon._load_floor(0)
 	$Main2D.add_child(Global.level_tilemap)
+	player.position = Global.dungeon.get_floor_reference(0).get_player_spawn(Global.level_tilemap)
+	print(Global.dungeon.get_floor_reference(0).get_player_spawn(Global.level_tilemap))
 	player.enable()
 	
 func new_game():
