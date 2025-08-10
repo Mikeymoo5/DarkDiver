@@ -21,7 +21,7 @@ var rng := RandomNumberGenerator.new()
 const pregen_floors := 3
 
 # TODO: use some sort of hashing?
-func _init(dungeon_seed := 0, max_floor_size := 100, maximum_rooms := 50, total_floors := 100):
+func _init(dungeon_seed := 0, max_floor_size := 500, maximum_rooms := 75, total_floors := 100):
 	print("DUNGEON INIT")
 	rng.seed = Time.get_unix_time_from_system()
 	self.dungeon_seed = dungeon_seed
@@ -39,10 +39,10 @@ func _init(dungeon_seed := 0, max_floor_size := 100, maximum_rooms := 50, total_
 		"rooms_per_floor": self.rooms_per_floor
 	}
 	
-	print("A new dungeon has been created.")
-	print("It is " + str(floor_size) + "x" + str(floor_size) + " tiles.")
-	print("Each floor contains " + str(rooms_per_floor) + " rooms.")
-	print("Each room cell is " + str(room_cell_size) + "x" + str(room_cell_size) + " tiles wide.")
+	#print("A new dungeon has been created.")
+	#print("It is " + str(floor_size) + "x" + str(floor_size) + " tiles.")
+	#print("Each floor contains " + str(rooms_per_floor) + " rooms.")
+	#print("Each room cell is " + str(room_cell_size) + "x" + str(room_cell_size) + " tiles wide.")
 	
 	if (room_cell_size % 2) == 0:
 		push_error("Room cell size is not odd!")

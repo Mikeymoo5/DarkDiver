@@ -16,6 +16,8 @@ var tileset: TileSet = load("res://assets/tilesets/custom_tileset.tres")
 
 @export var rooms_per_floor: int
 
+@export var rooms = []
+
 # ooh spooky and dangerous!
 @export var tiles = []
 enum Tiles {
@@ -62,7 +64,7 @@ func _init(dungeon_paramaters := {
 func _generate_floor():
 	var rng = RandomNumberGenerator.new()
 	var sq_rooms_per_floor = sqrt(self.rooms_per_floor)
-	var rooms = []
+	#var rooms = []
 	
 	for x in range(floor_size):
 		tiles.append([])
@@ -88,7 +90,9 @@ func _generate_floor():
 				"width": width,
 				"height": height
 			})
-			
+	
+	var flattened_rooms = []
+	
 	for i in range(rooms.size()):
 		for j in range(rooms[i].size()):
 			var center_tile = Vector2((i*room_cell_size) + i, (j*room_cell_size) + j)
@@ -96,6 +100,10 @@ func _generate_floor():
 			var offset_center = Vector2(center_tile.x + rooms[i][j].x_offset, center_tile.y + rooms[i][j].y_offset)
 			var topleft_tile = Vector2(offset_center.x - (rooms[i][j].width/2), offset_center.y - (rooms[i][j].height/2))
 			var local_tiles = []
+			rooms[i][j].offset_center = offset_center
+			#TODO: Find a better spot for this segment
+			# Add this room to the flattened_rooms list
+			flattened_rooms.append(rooms[i][j])
 			
 			for x in range(rooms[i][j].width):
 				#local_tiles.append([])
@@ -106,10 +114,41 @@ func _generate_floor():
 					#local_tiles[x].append(
 						#Tiles.FLOOR
 					#)
+					
+	# Generate tunnels
+	flattened_rooms.shuffle()
+	for i in flattened_rooms.size():
+		var first_center = flattened_rooms[i].offset_center
+		var next_center = flattened_rooms[mini(i+1, flattened_rooms.size()-1)].offset_center
+		var x_avg = ceili((first_center.x + next_center.y) / 2)
+		var y_avg = ceili((first_center.y + next_center.y) / 2)
+		#if _irng(rng).randi_range(0,1) == 0:
+		if false:
+			# Vertical then horizontal
+			_create_v_tunnel(first_center.y, y_avg, first_center.x)
+			_create_h_tunnel(first_center.x, next_center.x, y_avg)
+			_create_v_tunnel(y_avg, next_center.y, next_center.x)
+		else:
+			# Horizontal then vertical
+			_create_h_tunnel(first_center.x, x_avg, first_center.y)
+			_create_v_tunnel(first_center.y, next_center.y, x_avg)
+			_create_h_tunnel(x_avg, next_center.x, next_center.y)
+			
+func _create_h_tunnel(x1, x2, y):
+	for x in range(min(x1, x2), max(x1, x2) + 1):
+		tiles[x][y] = Tiles.FLOOR
+		tiles[x][y+1] = Tiles.FLOOR
+	
+func _create_v_tunnel(y1, y2, x):
+	for y in range(min(y1, y2), max(y1, y2) + 1):
+		tiles[x][y] = Tiles.FLOOR
+		tiles[x+1][y] = Tiles.FLOOR
+	
 # Increment RNG seed every use
 func _irng(rng) -> RandomNumberGenerator:
 	rng.seed += 1
 	return rng
+
 
 func _generate_floor_seed() -> int:
 	# TODO: Incorporate floor #. Currently, every floor uses the same seed
