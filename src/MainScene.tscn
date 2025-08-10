@@ -1,10 +1,16 @@
-[gd_scene load_steps=6 format=3 uid="uid://ct7jkw5on5oa1"]
+[gd_scene load_steps=9 format=3 uid="uid://ct7jkw5on5oa1"]
 
 [ext_resource type="Script" uid="uid://cbvwkarquld0g" path="res://src/MainScene.gd" id="1_rpqi1"]
 [ext_resource type="PackedScene" uid="uid://d216mdhtk6xfk" path="res://src/Player/player.tscn" id="2_uxrcv"]
+[ext_resource type="Texture2D" uid="uid://7o2jn0yk2vtw" path="res://assets/icons.png" id="3_4x8ea"]
+[ext_resource type="Script" uid="uid://bxhnxxnoiypj3" path="res://src/cursor.gd" id="3_5a7yu"]
 [ext_resource type="PackedScene" uid="uid://ga85g5tvwj82" path="res://src/Utilities/save_handler.tscn" id="3_rf2cd"]
 [ext_resource type="Script" uid="uid://cuskynje58oua" path="res://src/Levels/Dungeon/main_menu.gd" id="4_40oso"]
 [ext_resource type="Texture2D" uid="uid://cr8wdhb5ypfn2" path="res://assets/player.png" id="4_h5dix"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5a7yu"]
+atlas = ExtResource("3_4x8ea")
+region = Rect2(0, 0, 16, 16)
 
 [node name="MainScene" type="Node2D"]
 script = ExtResource("1_rpqi1")
@@ -17,8 +23,6 @@ scale = Vector2(1, 1)
 
 [node name="Camera2D" type="Camera2D" parent="Main2D/Player"]
 zoom = Vector2(2, 2)
-
-[node name="Cursor" type="Node2D" parent="Main2D"]
 
 [node name="Utilities" type="Node" parent="."]
 
@@ -98,6 +102,14 @@ text = "Health"
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Mana"
+
+[node name="Cursor" type="Node2D" parent="CanvasLayer"]
+z_index = 2
+scale = Vector2(2, 2)
+script = ExtResource("3_5a7yu")
+
+[node name="Sprite2D" type="Sprite2D" parent="CanvasLayer/Cursor"]
+texture = SubResource("AtlasTexture_5a7yu")
 
 [connection signal="pressed" from="CanvasLayer/Main Menu/MarginContainer/VBoxContainer/Load Game Button" to="CanvasLayer/Main Menu" method="_on_load_game_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Main Menu/MarginContainer/VBoxContainer/New Game Button" to="CanvasLayer/Main Menu" method="_on_new_game_button_pressed"]

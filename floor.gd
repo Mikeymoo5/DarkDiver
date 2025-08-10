@@ -5,6 +5,8 @@ class_name Floor
 #@export var tiles: Array[Array[int]]
 #var tiles: Array[Array[]]
 var tileset: TileSet = load("res://assets/tilesets/custom_tileset.tres")
+var enemy = load("res://src/Entity/BasicEntity/Entity.tscn")
+var boss = load("res://src/Entity/Boss/Boss.tscn")
 @export var dungeon_seed: int
 ## The seed of the individual floor
 @export var floor_seed: int
@@ -17,6 +19,7 @@ var tileset: TileSet = load("res://assets/tilesets/custom_tileset.tres")
 @export var rooms_per_floor: int
 
 @export var rooms = []
+@export var enemy_rooms = []
 
 # ooh spooky and dangerous!
 @export var tiles = []
@@ -44,8 +47,6 @@ const RoomTypeChances = {
 	RoomTypes.ENEMY: 0.35,
 	RoomTypes.TREASURE: 0.3,
 	RoomTypes.MINI_BOSS: 0.2,
-	RoomTypes.SPAWN: -1, # One per floor
-	RoomTypes.BOSS: -1, # One per floor
 }
 
 func _init(dungeon_paramaters := {
@@ -89,13 +90,16 @@ func _generate_floor():
 			#TODO: Find a better way to randomly select rooms, so that rooms can have the same 
 			var prob = _irng(rng).randf()
 			var room_type
-			for key in RoomTypeChances:
+			for key in RoomTypeChances.keys():
+				#print("Hi")
+				#print(str(RoomTypeChances[key]))
 				if not RoomTypeChances[key] == -1:
 					prob -= RoomTypeChances[key]
 					if prob <= 0:
 						room_type = key
-				
-			
+						break
+						#print(str(room_type))
+			#print("Made a " + str(RoomTypes) + " room.")
 			#TODO: Implement room types
 			rooms[x].append({
 				"x_offset": x_offset,
@@ -150,6 +154,7 @@ func _generate_floor():
 			
 	#TODO: move this into a pre-existing loop, probably the one above
 	for i in flattened_rooms.size():
+		#print(flattened_rooms[i])
 		if i==0:
 			flattened_rooms[i].type = RoomTypes.SPAWN
 			self.spawn_room = flattened_rooms[i]
@@ -157,6 +162,10 @@ func _generate_floor():
 		elif i==1:
 			flattened_rooms[i].type = RoomTypes.BOSS
 			self.boss_room = flattened_rooms[i]
+		else:
+			if flattened_rooms[i].type == RoomTypes.ENEMY:
+				print("Found enemy room")
+				self.enemy_rooms.append(flattened_rooms[i])
 				
 		
 func _create_h_tunnel(x1, x2, y):
@@ -200,3 +209,25 @@ func get_tilemaplayer() -> TileMapLayer:
 				#layer.set_cell(Vector2(x, y), 0, Vector2(0,0))
 	layer.set_cells_terrain_connect(floors, 0, 0)
 	return layer
+
+#TODO: spawn different enemies in different rooms
+func spawn_enemies(tilemaplayer: TileMapLayer):
+	#print(self.enemy_rooms)
+	#var enemy = ghost.instantiate()
+	#enemy.player = Global.player
+	#enemy.z_index = 1
+	#enemy.global_position = tilemaplayer.map_to_local(self.spawn_room.offset_center)
+	#Global.enemies.append(enemy)
+	for i in self.enemy_rooms:
+		var enemy = enemy.instantiate()
+		enemy.player = Global.player
+		enemy.z_index = 1
+		#print(self.enemy_rooms)
+		enemy.global_position = tilemaplayer.map_to_local(i.offset_center)
+		Global.enemies.append(enemy)
+	var boss_enemy = boss.instantiate()
+	boss_enemy.player = Global.player
+	boss_enemy.z_index = 1
+	boss_enemy.global_position = tilemaplayer.map_to_local(boss_room.offset_center)
+	Global.bosses.append(boss_enemy)
+	

@@ -21,7 +21,7 @@ var rng := RandomNumberGenerator.new()
 const pregen_floors := 3
 
 # TODO: use some sort of hashing?
-func _init(dungeon_seed := 0, max_floor_size := 500, maximum_rooms := 75, total_floors := 100):
+func _init(dungeon_seed := 0, max_floor_size := 100, maximum_rooms := 40, total_floors := 100):
 	print("DUNGEON INIT")
 	rng.seed = Time.get_unix_time_from_system()
 	self.dungeon_seed = dungeon_seed
@@ -64,4 +64,4 @@ func get_floor_reference(floor_id):
 
 func _load_floor(floor_to_load):
 	#TODO: Implement
-	Global.level_tilemap = self.floors[floor_to_load].get_tilemaplayer()
+	pass
